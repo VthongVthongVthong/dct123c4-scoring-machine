@@ -13,6 +13,7 @@
   <title>Máy Chấm Bài – AI Chấm Bài Tự Động</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
 </head>
 
 <body>
@@ -145,11 +146,31 @@
 
   </div>
 
+  <!-- Image Editor Modal -->
+  <div id="cropper-modal" class="login-overlay" style="display: none; z-index: 2000;">
+    <div class="login-card" style="max-width: 95%; width: 500px; height: 80vh; display: flex; flex-direction: column;">
+      <div class="login-header">
+        <h3>✂️ Chỉnh sửa ảnh</h3>
+        <p>Xoay hoặc cắt ảnh để AI đọc rõ hơn</p>
+      </div>
+      <div style="flex: 1; overflow: hidden; background: #000; position: relative; border-radius: 8px; margin: 10px 0;">
+        <img id="cropper-img" style="max-width: 100%;">
+      </div>
+      <div class="cropper-actions" style="display: flex; gap: 10px; justify-content: center; margin-bottom: 10px;">
+        <button id="rotate-left" class="action-btn" style="background: var(--bg-card);">↺ Xoay trái</button>
+        <button id="rotate-right" class="action-btn" style="background: var(--bg-card);">↻ Xoay phải</button>
+      </div>
+      <button id="crop-done" class="login-btn">✅ Xong, dùng ảnh này</button>
+      <button id="crop-cancel" class="action-btn" style="width: 100%; margin-top: 5px; background: transparent; border: 1px solid var(--border-color);">Hủy</button>
+    </div>
+  </div>
+
   <!-- Dependencies -->
   <script src="https://js.puter.com/v2/"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
   <script src="exercises.js?v=1"></script>
   <script src="config.js?v=1"></script>
   <script src="app.js?v=1"></script>

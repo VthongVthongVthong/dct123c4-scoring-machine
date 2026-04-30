@@ -20,6 +20,7 @@
     selectedExercise: null,
     isProcessing: false,
     extractedText: "",
+    cropper: null, // Lưu instance của Cropper
   };
 
   // --- DOM Cache ---
@@ -60,6 +61,14 @@
     dom.loginBtn = $("#login-btn");
     dom.appContainer = $("#app");
     dom.studentGreeting = $("#student-greeting");
+
+    // Cropper DOM
+    dom.cropperModal = $("#cropper-modal");
+    dom.cropperImg = $("#cropper-img");
+    dom.rotateLeft = $("#rotate-left");
+    dom.rotateRight = $("#rotate-right");
+    dom.cropDone = $("#crop-done");
+    dom.cropCancel = $("#crop-cancel");
   }
 
   // --- Initialize ---
@@ -110,6 +119,16 @@
     // Login Events
     dom.loginBtn.addEventListener("click", handleLogin);
     dom.masvInput.addEventListener("keypress", (e) => { if (e.key === "Enter") handleLogin(); });
+
+    // Cropper Events
+    dom.rotateLeft.addEventListener("click", () => state.cropper.rotate(-90));
+    dom.rotateRight.addEventListener("click", () => state.cropper.rotate(90));
+    dom.cropCancel.addEventListener("click", () => {
+      dom.cropperModal.style.display = "none";
+      if (state.cropper) { state.cropper.destroy(); state.cropper = null; }
+      dom.fileInput.value = "";
+    });
+    dom.cropDone.addEventListener("click", handleCropDone);
   }
 
   // --- Student Verification (Firebase) ---
@@ -316,13 +335,52 @@ Giọng văn truyền cảm hứng và khích lệ sinh viên.`;
     state.imageMimeType = file.type;
     const reader = new FileReader();
     reader.onload = (e) => {
-      state.imageBase64 = e.target.result;
-      dom.previewImg.src = e.target.result;
-      dom.previewContainer.classList.add("visible");
-      dom.uploadZone.classList.add("has-image");
-      dom.uploadZone.querySelector(".upload-placeholder").style.display = "none";
+      openCropper(e.target.result);
     };
     reader.readAsDataURL(file);
+  }
+
+  function openCropper(imageSrc) {
+    dom.cropperImg.src = imageSrc;
+    dom.cropperModal.style.display = "flex";
+    
+    if (state.cropper) state.cropper.destroy();
+    
+    state.cropper = new Cropper(dom.cropperImg, {
+      viewMode: 1,
+      dragMode: 'move',
+      autoCropArea: 1,
+      restore: false,
+      guides: true,
+      center: true,
+      highlight: false,
+      cropBoxMovable: true,
+      cropBoxResizable: true,
+      toggleDragModeOnDblclick: false,
+    });
+  }
+
+  function handleCropDone() {
+    if (!state.cropper) return;
+
+    // Lấy ảnh đã cắt dưới dạng Base64 (giảm chất lượng nhẹ để tối ưu dung lượng gửi AI)
+    const canvas = state.cropper.getCroppedCanvas({
+      maxWidth: 2048,
+      maxHeight: 2048,
+    });
+
+    const croppedBase64 = canvas.toDataURL(state.imageMimeType, 0.9);
+    
+    state.imageBase64 = croppedBase64;
+    dom.previewImg.src = croppedBase64;
+    dom.previewContainer.classList.add("visible");
+    dom.uploadZone.classList.add("has-image");
+    dom.uploadZone.querySelector(".upload-placeholder").style.display = "none";
+
+    // Đóng modal
+    dom.cropperModal.style.display = "none";
+    state.cropper.destroy();
+    state.cropper = null;
   }
 
   function clearImage() {

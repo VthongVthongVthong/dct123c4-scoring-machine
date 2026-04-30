@@ -281,3 +281,27 @@ body::before{content:'';position:fixed;inset:0;background:var(--gradient-bg);poi
 #app.unlocked {
   filter: blur(0);
 }
+
+/* Cropper Modal Tweak */
+#cropper-modal .login-card {
+  background: #000;
+  border: 1px solid var(--accent-purple);
+  padding: 20px;
+}
+
+.cropper-actions .action-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
+  color: #fff;
+  font-weight: 600;
+}
+
+.cropper-actions .action-btn:active {
+  background: var(--accent-purple);
+}
+
+/* Đảm bảo ảnh trong cropper không bị méo */
+.cropper-container {
+  border-radius: 8px;
+  overflow: hidden;
+}
