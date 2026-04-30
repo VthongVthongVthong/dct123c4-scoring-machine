@@ -45,9 +45,5 @@ npm run deploy
 ## 🔒 Cấu trúc thư mục
 
 - `src/`: Mã nguồn gốc (dễ đọc, dùng để phát triển).
-- `dist/`: Mã nguồn đã được mã hóa và tối ưu (dùng để chạy trên web).
-- `worker.js`: Mã nguồn chạy trên Cloudflare Workers (xử lý trung gian).
-- `build.js`: Script tự động hóa quy trình nén và đóng gói code.
-
 ---
 Developed with 💖 by **Vthong** (DCT123C4)
