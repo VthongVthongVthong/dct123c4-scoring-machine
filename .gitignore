@@ -1,0 +1,13 @@
+# Dependency directories
+node_modules/
+
+# API Keys and sensitive config
+config.js
+deploy.js
+worker.js
+# Build output
+dist/
+
+# OS generated files
+.DS_Store
+Thumbs.db
